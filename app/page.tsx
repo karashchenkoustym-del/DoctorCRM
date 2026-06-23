@@ -328,24 +328,28 @@ export default function SchedulePage() {
       </div>
 
       {/* Date navigation */}
-      <div className="card" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '0.625rem', flexWrap: 'wrap' }}>
-        <button className="btn-secondary" onClick={() => shiftRange(-1)} style={{ padding: '0.375rem 0.875rem', fontWeight: 700 }}>←</button>
-        <button className="btn-secondary" onClick={() => shiftRange(1)}  style={{ padding: '0.375rem 0.875rem', fontWeight: 700 }}>→</button>
-        <div style={{ flex: 1, fontWeight: 600, fontSize: '0.9375rem' }}>
-          {date ? formatRangeLabel(period, date) : ''}
-          {isCurrentPeriod && (
-            <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', fontWeight: 500, color: 'var(--accent)', background: 'var(--accent-light)', padding: '0.125rem 0.5rem', borderRadius: 999 }}>
+      <div className="card" style={{ padding: '0.75rem 1rem', marginBottom: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem' }}>
+          <button className="btn-secondary" onClick={() => shiftRange(-1)} style={{ padding: '0.375rem 0.875rem', fontWeight: 700 }}>←</button>
+          <button className="btn-secondary" onClick={() => shiftRange(1)}  style={{ padding: '0.375rem 0.875rem', fontWeight: 700 }}>→</button>
+          <div style={{ flex: 1, fontWeight: 600, fontSize: '0.9375rem', minWidth: 0 }}>
+            {date ? formatRangeLabel(period, date) : ''}
+            {isCurrentPeriod && (
+              <span style={{ marginLeft: '0.5rem', fontSize: '0.75rem', fontWeight: 500, color: 'var(--accent)', background: 'var(--accent-light)', padding: '0.125rem 0.5rem', borderRadius: 999 }}>
+                Today
+              </span>
+            )}
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '0.625rem' }}>
+          <input type="date" value={date} onChange={e => setDate(e.target.value)}
+            className="form-input" style={{ flex: 1, minWidth: 0, maxWidth: 320 }} />
+          {!isCurrentPeriod && (
+            <button className="btn-secondary" onClick={() => setDate(today)} style={{ whiteSpace: 'nowrap', padding: '0.375rem 0.75rem' }}>
               Today
-            </span>
+            </button>
           )}
         </div>
-        <input type="date" value={date} onChange={e => setDate(e.target.value)}
-          className="form-input" style={{ width: 160 }} />
-        {!isCurrentPeriod && (
-          <button className="btn-secondary" onClick={() => setDate(today)} style={{ whiteSpace: 'nowrap', padding: '0.375rem 0.75rem' }}>
-            Today
-          </button>
-        )}
       </div>
 
       {/* Summary (week / month / year) */}
