@@ -304,7 +304,7 @@ export default function SchedulePage() {
   }
 
   return (
-    <div style={{ padding: '2rem', width: '100%' }}>
+    <div style={{ padding: 'clamp(1rem, 4vw, 2rem)', width: '100%' }}>
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
         <h1 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 700 }}>Schedule</h1>
@@ -384,31 +384,31 @@ export default function SchedulePage() {
           {appointments.map(renderCard)}
         </div>
       ) : period === 'week' ? (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.625rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 'clamp(0.1875rem, 1vw, 0.625rem)' }}>
           {buildWeekDates(date).map(d => {
             const dayAppts = apptsByDate.get(d) ?? [];
             const isToday = d === today;
             return (
-              <div key={d} className="card" style={{ padding: '0.625rem', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
-                <button onClick={() => goToDay(d)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '0.5rem' }}>
-                  <div style={{ fontSize: '0.6875rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, textAlign: 'center' }}>
+              <div key={d} className="card" style={{ padding: 'clamp(0.1875rem, 1vw, 0.625rem)', minHeight: 'clamp(80px, 22vw, 260px)', display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <button onClick={() => goToDay(d)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0, marginBottom: '0.25rem', minWidth: 0 }}>
+                  <div style={{ fontSize: 'clamp(0.5rem, 1.6vw, 0.6875rem)', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, textAlign: 'center', overflow: 'hidden' }}>
                     {WEEKDAY_LABELS[(new Date(d + 'T00:00:00').getDay() + 6) % 7]}
                   </div>
                   <div style={{
-                    fontSize: '0.9375rem', fontWeight: 700, textAlign: 'center', margin: '0.25rem auto 0',
-                    width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
+                    fontSize: 'clamp(0.6875rem, 2vw, 0.9375rem)', fontWeight: 700, textAlign: 'center', margin: '0.1875rem auto 0',
+                    width: 'clamp(16px, 5vw, 26px)', height: 'clamp(16px, 5vw, 26px)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
                     color: isToday ? '#fff' : 'var(--foreground)', background: isToday ? 'var(--accent)' : 'transparent',
                   }}>
                     {Number(d.slice(8, 10))}
                   </div>
                 </button>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.3125rem', overflowY: 'auto', flex: 1 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1875rem', overflow: 'hidden', flex: 1, minWidth: 0 }}>
                   {dayAppts.length === 0 ? (
                     <div style={{ textAlign: 'center', color: 'var(--border)', fontSize: '0.75rem', marginTop: '0.5rem' }}>—</div>
                   ) : dayAppts.map(appt => (
                     <button key={appt.id} onClick={() => openEdit(appt)} className={`badge badge-${appt.status}`}
-                      style={{ textAlign: 'left', border: 'none', cursor: 'pointer', display: 'block', width: '100%', fontSize: '0.6875rem', lineHeight: 1.3, padding: '0.25rem 0.4375rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      <strong>{formatTime(appt.time)}</strong> {appt.client?.name ?? 'Unknown'}
+                      style={{ textAlign: 'left', border: 'none', cursor: 'pointer', display: 'block', width: '100%', minWidth: 0, fontSize: 'clamp(0.5rem, 1.5vw, 0.6875rem)', lineHeight: 1.3, padding: 'clamp(0.0625rem, 0.5vw, 0.25rem) clamp(0.125rem, 0.6vw, 0.4375rem)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {appt.client?.name ?? 'Unknown'}
                     </button>
                   ))}
                 </div>
@@ -418,12 +418,12 @@ export default function SchedulePage() {
         </div>
       ) : period === 'month' ? (
         <div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', marginBottom: '0.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', marginBottom: '0.5rem' }}>
             {WEEKDAY_LABELS.map(w => (
-              <div key={w} style={{ textAlign: 'center', fontSize: '0.75rem', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>{w}</div>
+              <div key={w} style={{ textAlign: 'center', fontSize: 'clamp(0.5625rem, 1.6vw, 0.75rem)', fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', overflow: 'hidden' }}>{w}</div>
             ))}
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '0.5rem' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, minmax(0, 1fr))', gap: 'clamp(0.1875rem, 1vw, 0.5rem)' }}>
             {buildMonthGrid(date).map(cell => {
               const dayAppts = apptsByDate.get(cell.date) ?? [];
               const isToday = cell.date === today;
@@ -431,21 +431,21 @@ export default function SchedulePage() {
               const overflow = dayAppts.length - visible.length;
               return (
                 <div key={cell.date} className="card" onClick={() => goToDay(cell.date)}
-                  style={{ padding: '0.4375rem', minHeight: 92, opacity: cell.inMonth ? 1 : 0.4, cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+                  style={{ padding: 'clamp(0.125rem, 0.8vw, 0.4375rem)', minHeight: 'clamp(48px, 13vw, 92px)', opacity: cell.inMonth ? 1 : 0.4, cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: '0.1875rem', minWidth: 0 }}>
                   <div style={{
-                    fontSize: '0.75rem', fontWeight: 700, alignSelf: 'flex-start',
-                    width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
+                    fontSize: 'clamp(0.625rem, 1.8vw, 0.75rem)', fontWeight: 700, alignSelf: 'flex-start',
+                    width: 'clamp(14px, 4vw, 20px)', height: 'clamp(14px, 4vw, 20px)', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%',
                     color: isToday ? '#fff' : 'var(--foreground)', background: isToday ? 'var(--accent)' : 'transparent',
                   }}>
                     {Number(cell.date.slice(8, 10))}
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.125rem', minWidth: 0 }}>
                     {visible.map(appt => (
-                      <div key={appt.id} className={`badge badge-${appt.status}`} style={{ fontSize: '0.625rem', padding: '0.0625rem 0.375rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
-                        {formatTime(appt.time)} {appt.client?.name ?? ''}
+                      <div key={appt.id} className={`badge badge-${appt.status}`} style={{ fontSize: 'clamp(0.5rem, 1.4vw, 0.625rem)', padding: '0.0625rem 0.25rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block', minWidth: 0 }}>
+                        {appt.client?.name ?? ''}
                       </div>
                     ))}
-                    {overflow > 0 && <div style={{ fontSize: '0.625rem', color: 'var(--muted)', paddingLeft: '0.375rem' }}>+{overflow} more</div>}
+                    {overflow > 0 && <div style={{ fontSize: 'clamp(0.5rem, 1.4vw, 0.625rem)', color: 'var(--muted)', paddingLeft: '0.25rem' }}>+{overflow}</div>}
                   </div>
                 </div>
               );
@@ -453,7 +453,7 @@ export default function SchedulePage() {
           </div>
         </div>
       ) : (
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '1rem' }}>
           {buildYearMonths(date).map(m => {
             const count = apptsByMonth.get(m.date.slice(0, 7))?.length ?? 0;
             const isCurrentMonth = m.date.slice(0, 7) === today.slice(0, 7);

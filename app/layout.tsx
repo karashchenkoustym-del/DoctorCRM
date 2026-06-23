@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
-import NavBar from '@/components/NavBar';
+import NavBar, { Header } from '@/components/NavBar';
 import RegisterSW from '@/components/RegisterSW';
 
 export const metadata: Metadata = {
@@ -22,11 +22,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body style={{ margin: 0 }}>
         <RegisterSW />
-        <div style={{ display: 'flex', minHeight: '100vh' }}>
-          <NavBar />
-          <main style={{ flex: 1, minWidth: 0, background: 'var(--background)' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+          <Header />
+          <main style={{ flex: 1, minWidth: 0, background: 'var(--background)', paddingBottom: '5.5rem' }}>
             {children}
           </main>
+          <NavBar />
         </div>
       </body>
     </html>

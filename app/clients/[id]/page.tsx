@@ -97,7 +97,7 @@ export default function ClientProfilePage() {
   if (!client) return null;
 
   return (
-    <div style={{ padding: '2rem', maxWidth: 800, margin: '0 auto' }}>
+    <div style={{ padding: 'clamp(1rem, 4vw, 2rem)', maxWidth: 800, margin: '0 auto' }}>
       {/* Back */}
       <Link href="/clients" style={{ color: 'var(--muted)', textDecoration: 'none', fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '0.375rem', marginBottom: '1.5rem' }}>
         ← Back to Clients
