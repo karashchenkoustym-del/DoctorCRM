@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const NAV_ITEMS = [
   { href: '/',        label: 'Schedule', icon: '📅' },
@@ -9,6 +9,17 @@ const NAV_ITEMS = [
 ];
 
 export function Header() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  async function handleLogout() {
+    await fetch('/api/login', { method: 'DELETE' });
+    router.push('/login');
+    router.refresh();
+  }
+
+  if (pathname === '/login') return null;
+
   return (
     <header style={{
       background: '#0f172a',
@@ -26,8 +37,17 @@ export function Header() {
           DoctorCRM
         </div>
       </div>
-      <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
-        By Ustym Karashchenko
+      <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
+          By Ustym Karashchenko
+        </div>
+        <button
+          onClick={handleLogout}
+          title="Log out"
+          style={{ background: 'none', border: 'none', color: '#94a3b8', cursor: 'pointer', fontSize: '0.75rem', padding: 0, textDecoration: 'underline' }}
+        >
+          Log out
+        </button>
       </div>
     </header>
   );
@@ -35,6 +55,8 @@ export function Header() {
 
 export default function NavBar() {
   const pathname = usePathname();
+
+  if (pathname === '/login') return null;
 
   return (
     <nav style={{
