@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { AUTH_COOKIE, hashPassword } from '@/lib/auth';
+import { AUTH_COOKIE, getAppPassword, hashPassword } from '@/lib/auth';
 
 export async function proxy(request: NextRequest) {
-  const expectedPassword = process.env.APP_PASSWORD;
+  const expectedPassword = await getAppPassword();
   // No password configured — leave the app open rather than lock everyone out.
   if (!expectedPassword) return NextResponse.next();
 

@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { AUTH_COOKIE, hashPassword } from '@/lib/auth';
+import { AUTH_COOKIE, getAppPassword, hashPassword } from '@/lib/auth';
 
 export async function POST(req: NextRequest) {
   const { password } = await req.json();
-  const expected = process.env.APP_PASSWORD;
+  const expected = await getAppPassword();
 
   if (!expected) {
     return NextResponse.json({ error: 'APP_PASSWORD is not configured on the server' }, { status: 500 });

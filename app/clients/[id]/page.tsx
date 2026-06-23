@@ -104,8 +104,8 @@ export default function ClientProfilePage() {
       </Link>
 
       {/* Profile card */}
-      <div className="card" style={{ padding: '1.75rem', marginBottom: '1.25rem' }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1.25rem' }}>
+      <div className="card" style={{ padding: 'clamp(1rem, 4vw, 1.75rem)', marginBottom: '1.25rem' }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap' }}>
           {/* Avatar */}
           <div style={{
             width: 64, height: 64, borderRadius: '50%',
@@ -117,13 +117,20 @@ export default function ClientProfilePage() {
           </div>
 
           {/* Info */}
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <h1 style={{ margin: '0 0 0.375rem', fontSize: '1.375rem', fontWeight: 700 }}>{client.name}</h1>
+          <div style={{ flex: 1, minWidth: 180 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
+              <h1 style={{ margin: '0 0 0.375rem', fontSize: '1.375rem', fontWeight: 700, minWidth: 0, overflowWrap: 'anywhere' }}>{client.name}</h1>
+              {/* Actions */}
+              <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
+                <button className="btn-secondary" onClick={openEdit}>✏️ Edit</button>
+                <button className="btn-danger" onClick={handleDelete}>Delete</button>
+              </div>
+            </div>
             <div style={{ display: 'flex', gap: '1.25rem', flexWrap: 'wrap', fontSize: '0.875rem', color: 'var(--muted)', marginBottom: '0.75rem' }}>
               {client.phone && <span>📞 {client.phone}</span>}
-              {client.email && <span>✉️ {client.email}</span>}
+              {client.email && <span style={{ overflowWrap: 'anywhere' }}>✉️ {client.email}</span>}
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
               <span style={{
                 background: 'var(--accent-light)', color: 'var(--accent)',
                 padding: '0.25rem 0.75rem', borderRadius: 999,
@@ -135,12 +142,6 @@ export default function ClientProfilePage() {
                 Patient since {new Date(client.createdAt).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}
               </span>
             </div>
-          </div>
-
-          {/* Actions */}
-          <div style={{ display: 'flex', gap: '0.5rem', flexShrink: 0 }}>
-            <button className="btn-secondary" onClick={openEdit}>✏️ Edit</button>
-            <button className="btn-danger" onClick={handleDelete}>Delete</button>
           </div>
         </div>
 
@@ -189,34 +190,34 @@ export default function ClientProfilePage() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
           {client.appointments.map(appt => (
             <div key={appt.id} className="card" style={{ padding: '1rem 1.25rem' }}>
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' }}>
                 {/* Date/Time */}
-                <div style={{ minWidth: 110, flexShrink: 0 }}>
+                <div style={{ minWidth: 0 }}>
                   <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{formatDate(appt.date)}</div>
                   <div style={{ fontSize: '0.8125rem', color: 'var(--muted)' }}>{formatTime(appt.time)} · {appt.duration} min</div>
                 </div>
-                {/* Comments */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  {appt.comments ? (
-                    <div style={{ fontSize: '0.875rem', color: '#334155', lineHeight: 1.5, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{appt.comments}</div>
-                  ) : (
-                    <div style={{ fontSize: '0.875rem', color: 'var(--muted)', fontStyle: 'italic' }}>No notes</div>
-                  )}
-                </div>
-                {/* Photos */}
-                {appt.images?.length > 0 && (
-                  <div style={{ display: 'flex', gap: '0.25rem', flexShrink: 0 }}>
-                    {appt.images.map((src, idx) => (
-                      <img key={idx} src={src} alt={`Attachment ${idx + 1}`} onClick={() => setPreview(src)}
-                        style={{ width: 36, height: 36, objectFit: 'cover', borderRadius: '0.375rem', border: '1px solid var(--border)', cursor: 'pointer' }} />
-                    ))}
-                  </div>
-                )}
                 {/* Status */}
                 <span className={`badge badge-${appt.status}`} style={{ flexShrink: 0 }}>
                   {STATUS_LABELS[appt.status]}
                 </span>
               </div>
+              {/* Comments */}
+              <div style={{ marginTop: '0.625rem' }}>
+                {appt.comments ? (
+                  <div style={{ fontSize: '0.875rem', color: '#334155', lineHeight: 1.5, whiteSpace: 'pre-wrap', overflowWrap: 'anywhere' }}>{appt.comments}</div>
+                ) : (
+                  <div style={{ fontSize: '0.875rem', color: 'var(--muted)', fontStyle: 'italic' }}>No notes</div>
+                )}
+              </div>
+              {/* Photos */}
+              {appt.images?.length > 0 && (
+                <div style={{ display: 'flex', gap: '0.375rem', marginTop: '0.5rem', flexWrap: 'wrap' }}>
+                  {appt.images.map((src, idx) => (
+                    <img key={idx} src={src} alt={`Attachment ${idx + 1}`} onClick={() => setPreview(src)}
+                      style={{ width: 40, height: 40, objectFit: 'cover', borderRadius: '0.375rem', border: '1px solid var(--border)', cursor: 'pointer' }} />
+                  ))}
+                </div>
+              )}
             </div>
           ))}
         </div>

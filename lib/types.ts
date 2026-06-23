@@ -43,4 +43,7 @@ export interface DB {
   createAppointment(data: Omit<Appointment, 'id' | 'createdAt'>): Promise<Appointment>;
   updateAppointment(id: string, data: Partial<Omit<Appointment, 'id' | 'createdAt'>>): Promise<Appointment | null>;
   deleteAppointment(id: string): Promise<boolean>;
+
+  getSetting(key: string): Promise<string | null>;
+  setSetting(key: string, value: string): Promise<void>;
 }

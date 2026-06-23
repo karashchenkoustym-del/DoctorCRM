@@ -39,6 +39,11 @@ function ensureSchema(): Promise<void> {
         images JSONB NOT NULL DEFAULT '[]',
         created_at TIMESTAMPTZ NOT NULL DEFAULT now()
       );
+
+      CREATE TABLE IF NOT EXISTS settings (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+      );
     `).then(() => undefined);
   }
   return schemaReady;
@@ -207,5 +212,21 @@ export const postgresDb: DB = {
     await ensureSchema();
     const { rowCount } = await pool.query('DELETE FROM appointments WHERE id = $1', [id]);
     return (rowCount ?? 0) > 0;
+  },
+
+  // ── Settings ─────────────────────────────────────────────
+  async getSetting(key) {
+    await ensureSchema();
+    const { rows } = await pool.query('SELECT value FROM settings WHERE key = $1', [key]);
+    return rows[0]?.value ?? null;
+  },
+
+  async setSetting(key, value) {
+    await ensureSchema();
+    await pool.query(
+      `INSERT INTO settings (key, value) VALUES ($1, $2)
+       ON CONFLICT (key) DO UPDATE SET value = $2`,
+      [key, value]
+    );
   },
 };

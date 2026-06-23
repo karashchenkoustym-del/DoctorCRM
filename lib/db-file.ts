@@ -8,14 +8,16 @@ const DATA_FILE = path.join(process.cwd(), 'data', 'db.json');
 interface DBData {
   clients: Client[];
   appointments: Appointment[];
+  settings: Record<string, string>;
 }
 
 async function readDB(): Promise<DBData> {
   try {
     const raw = await fs.readFile(DATA_FILE, 'utf-8');
-    return JSON.parse(raw) as DBData;
+    const data = JSON.parse(raw) as Partial<DBData>;
+    return { clients: data.clients ?? [], appointments: data.appointments ?? [], settings: data.settings ?? {} };
   } catch {
-    return { clients: [], appointments: [] };
+    return { clients: [], appointments: [], settings: {} };
   }
 }
 
@@ -129,5 +131,17 @@ export const fileDb: DB = {
     d.appointments = d.appointments.filter(a => a.id !== id);
     await writeDB(d);
     return d.appointments.length < before;
+  },
+
+  // ── Settings ─────────────────────────────────────────────
+  async getSetting(key) {
+    const d = await readDB();
+    return d.settings[key] ?? null;
+  },
+
+  async setSetting(key, value) {
+    const d = await readDB();
+    d.settings[key] = value;
+    await writeDB(d);
   },
 };

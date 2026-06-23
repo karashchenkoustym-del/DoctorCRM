@@ -41,6 +41,9 @@ export function Header() {
         <div style={{ fontSize: '0.75rem', color: '#94a3b8' }}>
           By Ustym Karashchenko
         </div>
+        <Link href="/settings" title="Settings" style={{ color: '#94a3b8', fontSize: '0.9375rem', textDecoration: 'none', lineHeight: 1 }}>
+          ⚙️
+        </Link>
         <button
           onClick={handleLogout}
           title="Log out"
